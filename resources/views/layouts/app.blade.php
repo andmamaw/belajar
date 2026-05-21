@@ -153,5 +153,66 @@
     {{ $slot }}
 </main>
         </div>
+
+        <!-- Session warning + auto-logout -->
+        <script>
+        let sessionWarningShown = false;
+
+        const warningTime = 301 * 60 * 1000;
+        const logoutTime = 300 * 60 * 1000;
+
+        setTimeout(function () {
+            sessionWarningShown = true;
+
+            const warningBox = document.createElement('div');
+            warningBox.id = 'session-warning-popup';
+            warningBox.innerHTML = `
+                <div style="
+                    position: fixed;
+                    top: 32px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    z-index: 99999;
+                    background: #0f172a;
+                    color: white;
+                    padding: 18px 22px;
+                    border-radius: 16px;
+                    box-shadow: 0 18px 45px rgba(15, 23, 42, 0.28);
+                    max-width: 440px;
+                    width: calc(100% - 32px);
+                    text-align: center;
+                    border: 1px solid rgba(255,255,255,0.15);
+                ">
+                    <div style="font-size: 15px; font-weight: 900;">
+                        Session hampir habis
+                    </div>
+
+                    <div style="margin-top: 8px; font-size: 13px; color: #cbd5e1; line-height: 1.6;">
+                        Kamu tidak aktif cukup lama. Session akan habis sekitar 5 menit lagi. Klik tombol di bawah untuk tetap aktif.
+                    </div>
+
+                    <button onclick="location.reload()" style="
+                        margin-top: 14px;
+                        background: #0ea5e9;
+                        color: white;
+                        border: none;
+                        border-radius: 999px;
+                        padding: 10px 18px;
+                        font-size: 13px;
+                        font-weight: 800;
+                        cursor: pointer;
+                    ">
+                        Tetap Login
+                    </button>
+                </div>
+            `;
+
+            document.body.appendChild(warningBox);
+        }, warningTime);
+
+        setTimeout(function () {
+            window.location.href = "{{ route('login') }}";
+        }, logoutTime);
+    </script>
     </body>
 </html>

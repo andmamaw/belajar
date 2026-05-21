@@ -1,10 +1,11 @@
 :root {
-    --brand-dark: #0f172a;
-    --brand-primary: #2563eb;
-    --brand-primary-dark: #1d4ed8;
+    --brand-dark: #07111f;
+    --brand-primary: #0ea5e9;
+    --brand-primary-dark: #0369a1;
     --brand-secondary: #38bdf8;
-    --brand-soft: #eff6ff;
-    --brand-border: #dbeafe;
+    --brand-accent: #22d3ee;
+    --brand-soft: #e0f2fe;
+    --brand-border: #bae6fd;
     --text-dark: #0f172a;
     --text-muted: #64748b;
     --white: #ffffff;
@@ -293,7 +294,7 @@
 }
 
 .admin-list-hero {
-    background: linear-gradient(135deg, #0f172a, #1e293b 55%, #1d4ed8);
+    background: linear-gradient(135deg, var(--brand-dark), #0f172a 52%, var(--brand-primary-dark));
     color: white;
     border-radius: 28px;
     padding: 30px;
@@ -507,4 +508,76 @@
     .admin-list-title {
         font-size: 24px;
     }
+    /* Smooth animation */
+@keyframes adminFadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(14px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes adminFloat {
+    0% {
+        transform: translateY(0) rotate(-8deg);
+    }
+
+    50% {
+        transform: translateY(-8px) rotate(-6deg);
+    }
+
+    100% {
+        transform: translateY(0) rotate(-8deg);
+    }
+}
+
+.admin-card,
+.admin-list-card,
+.admin-list-hero,
+.admin-stat-card {
+    animation: adminFadeUp 0.45s ease both;
+}
+
+.admin-hybrid-row {
+    animation: adminFadeUp 0.3s ease both;
+}
+
+.admin-card,
+.admin-list-card,
+.admin-stat-card,
+.admin-hybrid-row,
+.admin-btn-primary,
+.admin-btn-secondary,
+.admin-action-link,
+.admin-action-danger {
+    transition: all 0.22s ease;
+}
+
+.admin-card:hover,
+.admin-list-card:hover,
+.admin-stat-card:hover {
+    transform: translateY(-2px);
+}
+
+.admin-hybrid-row:hover {
+    transform: translateX(4px);
+}
+
+.admin-btn-primary:hover,
+.admin-btn-secondary:hover {
+    transform: translateY(-2px);
+}
+
+.admin-btn-primary:active,
+.admin-btn-secondary:active {
+    transform: translateY(0);
+}
+
+.admin-animated-logo-card {
+    animation: adminFloat 4s ease-in-out infinite;
+}
 }

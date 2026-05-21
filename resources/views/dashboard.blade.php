@@ -49,7 +49,7 @@
                     </div>
 
                     <div style="height: 220px; display: flex; align-items: center; justify-content: center;">
-                        <div style="width: 170px; height: 170px; border-radius: 34px; background: linear-gradient(135deg, rgba(255,255,255,0.22), rgba(255,255,255,0.06)); border: 1px solid rgba(255,255,255,0.24); box-shadow: 0 30px 60px rgba(0,0,0,0.28); transform: rotate(-8deg); display: flex; align-items: center; justify-content: center;">
+                        <div class="admin-animated-logo-card" style="width: 170px; height: 170px; border-radius: 34px; background: linear-gradient(135deg, rgba(255,255,255,0.22), rgba(255,255,255,0.06)); border: 1px solid rgba(255,255,255,0.24); box-shadow: 0 30px 60px rgba(0,0,0,0.28); transform: rotate(-8deg); display: flex; align-items: center; justify-content: center;">
                             <img src="{{ asset('images/abc5aab3-3b27-438a-a6b9-2adcc2a6cb9b.jpeg') }}" alt="Logo" style="width: 90px; height: auto; filter: drop-shadow(0 12px 18px rgba(0,0,0,0.35));">
                         </div>
                     </div>

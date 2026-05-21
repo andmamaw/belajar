@@ -1,333 +1,421 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> {{ $profile->full_name ?? 'Portfolio' }} </title>
+    <title>{{ ($profile->full_name ?? 'Portfolio') . ' - Portfolio' }}</title>
 
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}?v=10">
+    <link rel="shortcut icon" type="image/png" href="{{ asset('favicon.png') }}?v=10">
+
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <link rel="stylesheet" href="{{ asset('css/portfolio-theme.css') }}?v=50">
 </head>
+<body>
+@php
+    $waNumber = preg_replace('/\D/', '', $profile->phone ?? '');
+@endphp
 
-<body class="bg-[#050505] text-white">
-    <main class="min-h-screen">
+<div class="portfolio-shell">
+    <div class="portfolio-frame">
+        <nav class="public-nav">
+            <div class="public-nav-inner">
+                <a href="#top" class="public-brand public-brand-text-only">
+                    <span class="public-brand-name">{{ $profile->full_name ?? config('app.name', 'Portfolio') }}</span>
+                </a>
 
-        <section class="px-6 py-8 md:px-16 lg:px-24">
-            <nav class="flex items-center justify-between">
-                <h1 class="text-lg font-semibold tracking-tight">
-                    {{ $profile->full_name ?? 'Portfolio' }}
-                </h1>
-
-                <div class="hidden md:flex items-center gap-8 text-sm text-zinc-400">
-                    <a href="#about" class="hover:text-white">About</a>
-                    <a href="#services" class="hover:text-white">Services</a>
-                    <a href="#projects" class="hover:text-white">Projects</a>
-                    <a href="#experience" class="hover:text-white">Experience</a>
-                    <a href="#education" class="hover:text-white">Education</a>
-                    <a href="#contact" class="hover:text-white">Contact</a>
-                </div>
-            </nav>
-        </section>
-
-        <section id="about" class="px-6 pt-16 pb-24 md:px-16 lg:px-24">
-            <div class="max-w-5xl">
-                <p class="mb-5 text-sm uppercase tracking-[0.3em] text-zinc-500">
-                    Portfolio
-                </p>
-
-                <h2 class="max-w-4xl text-5xl font-semibold tracking-tight md:text-7xl lg:text-8xl">
-                    {{ $profile->headline ?? 'Digital Solutions for Modern Businesses' }}
-                </h2>
-
-                <p class="mt-8 max-w-2xl text-lg leading-8 text-zinc-400">
-    {{ $profile->bio ?? 'Saya adalah Web Developer dan System Builder yang berfokus pada pembuatan website, sistem bisnis, dan aplikasi berbasis web untuk membantu operasional perusahaan menjadi lebih rapi dan efisien.' }}
-                </p>
-
-                <div class="mt-10 flex flex-wrap gap-4">
-                    <a href="#projects" class="rounded-full bg-white px-6 py-3 text-sm font-medium text-black hover:bg-zinc-200">
-                        Lihat Project
-                    </a>
-
-                    <a href="#contact" class="rounded-full border border-zinc-700 px-6 py-3 text-sm font-medium text-white hover:border-zinc-400">
-                        Hubungi Saya
-                    </a>
-                </div>
-            </div>
-        </section>
-
-        <section class="px-6 pb-24 md:px-16 lg:px-24">
-            <div class="grid gap-4 md:grid-cols-4">
-                <div class="rounded-3xl border border-zinc-800 bg-zinc-950 p-6">
-                    <p class="text-3xl font-semibold">{{ $projects->count() }}+</p>
-                    <p class="mt-2 text-sm text-zinc-500">Web Project</p>
+                <div class="public-menu">
+                    <a href="#top" class="active">Home</a>
+                    <a href="#projects">Work</a>
+                    <a href="#about">About</a>
+                    <a href="#experience">Resume</a>
+                    <a href="#contact">Contact</a>
                 </div>
 
-                <div class="rounded-3xl border border-zinc-800 bg-zinc-950 p-6">
-                    <p class="text-3xl font-semibold">IT</p>
-                    <p class="mt-2 text-sm text-zinc-500">Development Focus</p>
-                </div>
-
-                <div class="rounded-3xl border border-zinc-800 bg-zinc-950 p-6">
-                    <p class="text-3xl font-semibold">Edu</p>
-                    <p class="mt-2 text-sm text-zinc-500">{{ $profile->education ?? '-' }}</p>
-                </div>
-
-                <div class="rounded-3xl border border-zinc-800 bg-zinc-950 p-6">
-                    <p class="text-3xl font-semibold">{{ $profile->company ?? '-' }}</p>
-                    <p class="mt-2 text-sm text-zinc-500">{{ $profile->job_title ?? '-' }}</p>
-                </div>
+                @if (!empty($waNumber))
+                    <a href="https://wa.me/{{ $waNumber }}" target="_blank" class="nav-cta">Let's Talk ↗</a>
+                @elseif (!empty($profile->email))
+                    <a href="mailto:{{ $profile->email }}" class="nav-cta">Let's Talk ↗</a>
+                @else
+                    <a href="#contact" class="nav-cta">Let's Talk ↗</a>
+                @endif
             </div>
-        </section>
-        <section id="services" class="px-6 pb-24 md:px-16 lg:px-24">
-    <div class="mb-10">
-        <p class="mb-3 text-sm uppercase tracking-[0.3em] text-zinc-500">
-            Services
-        </p>
+        </nav>
 
-        <h2 class="text-3xl font-semibold md:text-5xl">
-            Keahlian
-        </h2>
-    </div>
-
-    <div class="grid gap-5 md:grid-cols-3">
-        @forelse ($services as $service)
-            <div class="rounded-[2rem] border border-zinc-800 bg-zinc-950 p-8 transition hover:border-zinc-600">
-                <div class="mb-8 flex h-14 w-14 items-center justify-center rounded-2xl bg-white text-sm font-semibold text-black">
-                    {{ $service->icon ?? 'IT' }}
-                </div>
-
-                <h3 class="text-2xl font-semibold">
-                    {{ $service->title }}
-                </h3>
-
-                <p class="mt-4 text-sm leading-6 text-zinc-400">
-                    {{ $service->description }}
-                </p>
-            </div>
-        @empty
-            <div class="rounded-[2rem] border border-zinc-800 bg-zinc-950 p-8">
-                <p class="text-zinc-400">Belum ada layanan yang ditambahkan.</p>
-            </div>
-        @endforelse
-    </div>
-</section>
-        <section id="projects" class="px-6 pb-24 md:px-16 lg:px-24">
-            <div class="mb-10 flex items-end justify-between gap-6">
-                <div>
-                    <p class="mb-3 text-sm uppercase tracking-[0.3em] text-zinc-500">
-                        Selected Work
-                    </p>
-                    <h2 class="text-3xl font-semibold md:text-5xl">
-                        Project Saya
-                    </h2>
-                </div>
-            </div>
-
-            <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-                @forelse ($projects as $project)
-                    <article class="group rounded-[2rem] border border-zinc-800 bg-zinc-950 p-6 transition hover:border-zinc-600">
-                        <div class="mb-8 h-48 overflow-hidden rounded-[1.5rem] bg-gradient-to-br from-zinc-800 to-zinc-950">
-                            @if ($project->image)
-                                <img src="{{ $project->image }}" alt="{{ $project->title }}" class="h-full w-full object-cover">
-                            @else
-                                <div class="flex h-full items-center justify-center">
-                                    <span class="text-sm text-zinc-500">Project Preview</span>
-                                </div>
-                            @endif
-                        </div>
-
-                        <p class="mb-3 text-sm text-zinc-500">
-                            {{ $project->category }}
-                        </p>
-
-                        <h3 class="text-2xl font-semibold tracking-tight">
-                            {{ $project->title }}
-                        </h3>
-
-                        <p class="mt-4 text-sm leading-6 text-zinc-400">
-                            {{ $project->description }}
-                        </p>
-
-                        <p class="mt-6 text-sm text-zinc-500">
-                            {{ $project->tech_stack }}
-                        </p>
-
-                        <div class="mt-6 flex flex-wrap gap-3">
-                            <a href="{{ route('projects.show', $project) }}" class="inline-flex rounded-full border border-zinc-700 px-5 py-2 text-sm text-white hover:border-zinc-400">
-                                Detail
-                            </a>
-
-                            @if ($project->project_link)
-                                <a href="{{ $project->project_link }}" target="_blank" class="inline-flex rounded-full bg-white px-5 py-2 text-sm font-medium text-black hover:bg-zinc-200">
-                                    View Project
-                                </a>
-                            @endif
-                        </div>
-                    </article>
-                @empty
-                    <div class="rounded-3xl border border-zinc-800 bg-zinc-950 p-6">
-                        <p class="text-zinc-400">Belum ada project yang ditambahkan.</p>
-                    </div>
-                @endforelse
-            </div>
-        </section>
-
-        <section id="experience" class="px-6 pb-24 md:px-16 lg:px-24">
-    <div class="rounded-[2rem] border border-zinc-800 bg-zinc-950 p-8 md:p-10">
-        <p class="mb-3 text-sm uppercase tracking-[0.3em] text-zinc-500">
-            Profile
-        </p>
-
-        <h2 class="text-3xl font-semibold md:text-5xl">
-            {{ $profile->headline ?? 'Web Developer & Business System Builder' }}
-        </h2>
-
-        <div class="mt-8 grid gap-6 md:grid-cols-3">
-            <div>
-                <p class="text-sm text-zinc-500">Pendidikan</p>
-                <p class="mt-2 text-lg">{{ $profile->education ?? '-' }}</p>
-            </div>
-
-            <div>
-                <p class="text-sm text-zinc-500">Pekerjaan</p>
-                <p class="mt-2 text-lg">{{ $profile->job_title ?? '-' }}</p>
-            </div>
-
-            <div>
-                <p class="text-sm text-zinc-500">Perusahaan / Tim</p>
-                <p class="mt-2 text-lg">{{ $profile->company ?? '-' }}</p>
-            </div>
-        </div>
-
-        <div class="mt-12">
-            <p class="mb-6 text-sm uppercase tracking-[0.3em] text-zinc-500">
-                Experience
-            </p>
-
-            <div class="space-y-5">
-                @forelse ($experiences as $experience)
-                    <div class="rounded-3xl border border-zinc-800 bg-black/40 p-6">
-                        <div class="flex flex-col gap-2 md:flex-row md:items-start md:justify-between">
-                            <div>
-                                <h3 class="text-xl font-semibold">
-                                    {{ $experience->position }}
-                                </h3>
-
-                                <p class="mt-1 text-sm text-zinc-500">
-                                    {{ $experience->company }}
-                                </p>
+        <main id="top">
+            <section class="hero hero-tall">
+                <div class="container">
+                    <div class="hero-main">
+                        <div class="hero-copy">
+                            <div class="hero-eyebrow">
+                                <span class="hero-dot"></span>
+                                HELLO, I'M {{ strtoupper(explode(' ', $profile->full_name ?? 'ANDI')[0]) }}
                             </div>
 
-                            <p class="text-sm text-zinc-500">
-                                {{ $experience->period }}
+                            <h1 class="hero-title">
+                                Build digital products with <span>clarity.</span>
+                            </h1>
+
+                            <p class="hero-desc">
+                                {{ $profile->headline ?? 'Web Developer, System Builder, and Creative Founder.' }}
+                                <br>
+                                {{ $profile->bio ?? 'Saya membantu bisnis berkembang melalui website yang cepat, sistem yang efisien, dan solusi digital yang tepat sasaran.' }}
+                            </p>
+
+                            <div class="hero-actions">
+                                <a href="#projects" class="btn-primary">View My Work →</a>
+                                <a href="#contact" class="btn-ghost">Download Resume ↓</a>
+                            </div>
+                        </div>
+
+                        <div class="hero-person">
+                            <div class="portrait-orb"></div>
+
+                            <div class="portrait-wrap">
+                                @if (file_exists(public_path('images/profile.png')))
+                                    <img 
+                                        src="{{ asset('images/profile.png') }}" 
+                                        alt="Profile" 
+                                        class="portrait-img"
+                                    >
+                                @else
+                                    <img 
+                                        src="{{ asset('images/logo.png') }}" 
+                                        alt="Profile" 
+                                        class="portrait-img portrait-logo-fallback"
+                                    >
+                                @endif
+                            </div>
+
+                            <div class="role-card">
+                                <div class="role-item">
+                                    <div class="role-icon">▣</div>
+                                    <div>
+                                        <div class="role-label">Current Role</div>
+                                        <div class="role-value">{{ $profile->job_title ?? 'Founder & Digital Strategist' }}</div>
+                                    </div>
+                                </div>
+
+                                <div class="role-item">
+                                    <div class="role-icon">⌖</div>
+                                    <div>
+                                        <div class="role-label">Location</div>
+                                        <div class="role-value">{{ $profile->location ?? 'Bandung, Indonesia' }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stats-bar">
+                        <div class="stat-item">
+                            <div class="stat-value">{{ $projects->count() }}+</div>
+                            <div class="stat-label">Projects</div>
+                        </div>
+
+                        <div class="stat-item">
+                            <div class="stat-value">{{ $experiences->count() }}+</div>
+                            <div class="stat-label">Experience</div>
+                        </div>
+
+                        <div class="stat-item">
+                            <div class="stat-value">{{ $profile->company ?? 'Cipherion' }}</div>
+                            <div class="stat-label">Personal Brand</div>
+                        </div>
+
+                        <div class="stat-item">
+                            <div class="stat-value">{{ $profile->company ?? '-' }}</div>
+                            <div class="stat-label">Company</div>
+                        </div>
+
+                        <div class="stat-item">
+                            <div class="stat-value">{{ $profile->education ?? '-' }}</div>
+                            <div class="stat-label">Education</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="projects" class="public-section">
+                <div class="container">
+                    <div class="section-head-row">
+                        <div>
+                            <div class="section-kicker">Selected Work</div>
+                            <h2 class="section-title">Featured Projects</h2>
+                            <p class="section-desc">
+                                Beberapa project pilihan yang menunjukkan pengalaman dalam membangun produk digital, website, dan sistem bisnis.
                             </p>
                         </div>
 
-                        <p class="mt-4 text-sm leading-6 text-zinc-400">
-                            {{ $experience->description }}
-                        </p>
-                    </div>
-                @empty
-                    <div class="rounded-3xl border border-zinc-800 bg-black/40 p-6">
-                        <p class="text-zinc-400">Belum ada pengalaman kerja yang ditambahkan.</p>
-                    </div>
-                @endforelse
-            </div>
-        </div>
-    </div>
-</section>
-<section id="education" class="px-6 pb-24 md:px-16 lg:px-24">
-    <div class="mb-10">
-        <p class="mb-3 text-sm uppercase tracking-[0.3em] text-zinc-500">
-            Education
-        </p>
-
-        <h2 class="text-3xl font-semibold md:text-5xl">
-            Pendidikan
-        </h2>
-    </div>
-
-    <div class="space-y-5">
-        @forelse ($educations as $education)
-            <div class="rounded-[2rem] border border-zinc-800 bg-zinc-950 p-8">
-                <div class="flex flex-col gap-2 md:flex-row md:items-start md:justify-between">
-                    <div>
-                        <h3 class="text-2xl font-semibold">
-                            {{ $education->major }}
-                        </h3>
-
-                        <p class="mt-2 text-zinc-400">
-                            {{ $education->school_name }}
-                        </p>
+                        <a href="#projects" class="card-link">View All Projects →</a>
                     </div>
 
-                    <p class="text-sm text-zinc-500">
-                        {{ $education->period }}
-                    </p>
+                    <div class="projects-row-wide">
+                        @forelse ($projects->take(6) as $project)
+                            <a href="{{ route('projects.show', $project) }}" class="project-card">
+                                <div class="project-thumb">
+                                    @if (!empty($project->image))
+                                        <img 
+                                            src="{{ $project->image }}" 
+                                            alt="{{ $project->title }}"
+                                            onerror="this.onerror=null; this.src='{{ asset('images/image.png') }}'; this.classList.add('logo-fallback');"    
+                                        >
+                                    @else
+                                        <img src="{{ asset('images/image.png') }}" alt="{{ $project->title }}" class="logo-fallback">
+                                    @endif
+                                </div>
+
+                                <div class="project-name">{{ $project->title }}</div>
+                                <div class="project-category">{{ $project->category ?? 'Project' }}</div>
+
+                                <div class="project-desc">
+                                    {{ \Illuminate\Support\Str::limit($project->description, 95) }}
+                                </div>
+
+                                <div class="project-tags">
+                                    @foreach (array_slice(explode(',', $project->tech_stack ?? ''), 0, 3) as $tag)
+                                        @if (trim($tag) !== '')
+                                            <span class="project-tag">{{ trim($tag) }}</span>
+                                        @endif
+                                    @endforeach
+                                </div>
+
+                                <div class="project-arrow">→</div>
+                            </a>
+                        @empty
+                            <div class="project-card">
+                                <div class="project-name">Belum ada project</div>
+                                <div class="project-desc">Tambahkan project dari dashboard admin.</div>
+                            </div>
+                        @endforelse
+                    </div>
                 </div>
+            </section>
 
-                <p class="mt-6 text-sm leading-6 text-zinc-400">
-                    {{ $education->description }}
-                </p>
-            </div>
-        @empty
-            <div class="rounded-[2rem] border border-zinc-800 bg-zinc-950 p-8">
-                <p class="text-zinc-400">Belum ada data pendidikan yang ditambahkan.</p>
-            </div>
-        @endforelse
+            <section id="about" class="public-section public-section-muted">
+                <div class="container">
+                    <div class="about-layout">
+                        <div class="glass-card about-card about-card-wide">
+                            <div class="section-kicker">About</div>
+                            <h2 class="section-title">About Me</h2>
+
+                            <p class="about-text about-text-large">
+                                {{ $profile->bio ?? 'Saya adalah developer dan founder yang berfokus pada pembangunan produk digital yang fungsional, scalable, dan berdampak.' }}
+                            </p>
+                        </div>
+
+                        <div class="glass-card about-card">
+                            <div class="card-title">Profile Details</div>
+
+                            <div class="about-mini-grid">
+                                <div class="about-mini-item">
+                                    <div class="about-mini-label">Experience</div>
+                                    <div class="about-mini-value">{{ $experiences->count() }}+ Years</div>
+                                </div>
+
+                                <div class="about-mini-item">
+                                    <div class="about-mini-label">Education</div>
+                                    <div class="about-mini-value">{{ $profile->education ?? '-' }}</div>
+                                </div>
+
+                                <div class="about-mini-item">
+                                    <div class="about-mini-label">Work</div>
+                                    <div class="about-mini-value">{{ $profile->job_title ?? '-' }}</div>
+                                </div>
+
+                                <div class="about-mini-item">
+                                    <div class="about-mini-label">Company</div>
+                                    <div class="about-mini-value">{{ $profile->company ?? '-' }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="experience" class="public-section">
+                <div class="container">
+                    <div class="section-head">
+                        <div class="section-kicker">Resume</div>
+                        <h2 class="section-title">Experience & Education</h2>
+                        <p class="section-desc">
+                            Ringkasan perjalanan profesional dan pendidikan yang mendukung kemampuan dalam membangun solusi digital.
+                        </p>
+                    </div>
+
+                    <div class="resume-layout">
+                        <div class="glass-card mini-card resume-card">
+                            <div class="card-title">Work Experience</div>
+
+                            @forelse ($experiences as $experience)
+                                <div class="timeline-item">
+                                    <div class="timeline-icon">▣</div>
+                                    <div>
+                                        <div class="timeline-title">{{ $experience->position ?? '-' }}</div>
+                                        <div class="timeline-sub">
+                                            {{ $experience->company ?? '-' }}<br>
+                                            {{ $experience->period ?? '-' }}<br>
+                                            {{ $experience->description ?? '-' }}
+                                        </div>
+                                    </div>
+                                </div>
+                            @empty
+                                <div class="timeline-sub">Belum ada data experience.</div>
+                            @endforelse
+                        </div>
+
+                        <div id="education" class="glass-card mini-card resume-card">
+                            <div class="card-title">Education</div>
+
+                            @forelse ($educations as $education)
+                                <div class="timeline-item">
+                                    <div class="timeline-icon">◇</div>
+                                    <div>
+                                        <div class="timeline-title">{{ $education->major ?? '-' }}</div>
+                                        <div class="timeline-sub">
+                                            {{ $education->school_name ?? '-' }}<br>
+                                            {{ $education->period ?? '-' }}<br>
+                                            {{ $education->description ?? '-' }}
+                                        </div>
+                                    </div>
+                                </div>
+                            @empty
+                                <div class="timeline-sub">Belum ada data education.</div>
+                            @endforelse
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="contact" class="public-section contact-section">
+                <div class="container">
+                    <div class="glass-card contact-card contact-card-wide">
+                        <div>
+                            <div class="section-kicker">Contact</div>
+                            <h2 class="section-title">Let's Work Together</h2>
+
+                            <p class="contact-text contact-text-large">
+                                Have a project in mind or just want to say hello? I'd love to hear from you.
+                                Hubungi saya untuk diskusi website, sistem bisnis, atau kerja sama digital.
+                            </p>
+
+                            <div class="hero-actions" style="margin-top: 28px;">
+                                @if (!empty($waNumber))
+                                    <a href="https://wa.me/{{ $waNumber }}" target="_blank" class="btn-primary">Get In Touch →</a>
+                                @elseif (!empty($profile->email))
+                                    <a href="mailto:{{ $profile->email }}" class="btn-primary">Get In Touch →</a>
+                                @else
+                                    <a href="#contact" class="btn-primary">Get In Touch →</a>
+                                @endif
+
+                                @if (!empty($profile->email))
+                                    <a href="mailto:{{ $profile->email }}" class="btn-ghost">{{ $profile->email }}</a>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="contact-info-list">
+                            <div class="about-mini-item">
+                                <div class="about-mini-label">Email</div>
+                                <div class="about-mini-value">{{ $profile->email ?? '-' }}</div>
+                            </div>
+
+                            <div class="about-mini-item">
+                                <div class="about-mini-label">Phone</div>
+                                <div class="about-mini-value">{{ $profile->phone ?? '-' }}</div>
+                            </div>
+
+                            <div class="about-mini-item">
+                                <div class="about-mini-label">Location</div>
+                                <div class="about-mini-value">{{ $profile->location ?? '-' }}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <footer class="footer">
+                        © {{ date('Y') }} {{ $profile->full_name ?? config('app.name', 'Portfolio') }}. All rights reserved.
+                    </footer>
+                </div>
+            </section>
+        </main>
     </div>
-</section>
-        <section id="contact" class="px-6 pb-16 md:px-16 lg:px-24">
-    <div class="rounded-[2rem] border border-zinc-800 bg-zinc-950 p-8 md:p-10">
-        <p class="mb-3 text-sm uppercase tracking-[0.3em] text-zinc-500">
-            Contact
-        </p>
+</div>
 
-        <h2 class="text-3xl font-semibold md:text-5xl">
-            Let's build something useful.
-        </h2>
+<script>
+    const nav = document.querySelector('.public-nav');
+    const navLinks = document.querySelectorAll('.public-menu a[href^="#"]');
 
-        <p class="mt-6 max-w-2xl text-base leading-7 text-zinc-400">
-            Hubungi saya untuk kebutuhan website, sistem bisnis, dashboard, atau pengembangan aplikasi berbasis web.
-        </p>
+    const sections = Array.from(navLinks)
+        .map(link => {
+            const target = document.querySelector(link.getAttribute('href'));
+            return target ? { link, target } : null;
+        })
+        .filter(Boolean);
 
-        <div class="mt-10 grid gap-4 md:grid-cols-2">
-            @if ($profile?->email)
-                <a href="mailto:{{ $profile->email }}" class="rounded-3xl border border-zinc-800 bg-black/40 p-6 hover:border-zinc-600">
-                    <p class="text-sm text-zinc-500">Email</p>
-                    <p class="mt-2 text-lg">{{ $profile->email }}</p>
-                </a>
-            @endif
+    function setActiveMenu() {
+        const scrollPosition = window.scrollY + 160;
+        const bottomPosition = window.innerHeight + window.scrollY;
+        const documentHeight = document.documentElement.scrollHeight;
 
-            @if ($profile?->phone)
-                <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $profile->phone) }}" target="_blank" class="rounded-3xl border border-zinc-800 bg-black/40 p-6 hover:border-zinc-600">
-                    <p class="text-sm text-zinc-500">WhatsApp</p>
-                    <p class="mt-2 text-lg">{{ $profile->phone }}</p>
-                </a>
-            @endif
+        if (nav) {
+            if (window.scrollY > 20) {
+                nav.classList.add('is-scrolled');
+            } else {
+                nav.classList.remove('is-scrolled');
+            }
+        }
 
-            @if ($profile?->instagram)
-                <a href="{{ $profile->instagram }}" target="_blank" class="rounded-3xl border border-zinc-800 bg-black/40 p-6 hover:border-zinc-600">
-                    <p class="text-sm text-zinc-500">Instagram</p>
-                    <p class="mt-2 text-lg">Open Instagram</p>
-                </a>
-            @endif
+        let currentSection = sections[0];
 
-            @if ($profile?->linkedin)
-                <a href="{{ $profile->linkedin }}" target="_blank" class="rounded-3xl border border-zinc-800 bg-black/40 p-6 hover:border-zinc-600">
-                    <p class="text-sm text-zinc-500">LinkedIn</p>
-                    <p class="mt-2 text-lg">Open LinkedIn</p>
-                </a>
-            @endif
-        </div>
-    </div>
+        sections.forEach(section => {
+            if (section.target.offsetTop <= scrollPosition) {
+                currentSection = section;
+            }
+        });
 
-    <div class="border-t border-zinc-800 pt-8 mt-12">
-        <p class="text-sm text-zinc-500">
-            © {{ date('Y') }} {{ $profile->full_name ?? 'Portfolio' }}. Built with Laravel and Supabase.
-        </p>
-    </div>
-</section>
+        // Jika sudah hampir sampai paling bawah halaman, paksa Contact aktif
+        if (bottomPosition >= documentHeight - 40) {
+            const contactLink = document.querySelector('.public-menu a[href="#contact"]');
+            const contactTarget = document.querySelector('#contact');
 
-    </main>
+            if (contactLink && contactTarget) {
+                currentSection = {
+                    link: contactLink,
+                    target: contactTarget
+                };
+            }
+        }
+
+        navLinks.forEach(link => link.classList.remove('active'));
+
+        if (currentSection && currentSection.link) {
+            currentSection.link.classList.add('active');
+        }
+    }
+
+    navLinks.forEach(link => {
+        link.addEventListener('click', function (event) {
+            const target = document.querySelector(this.getAttribute('href'));
+
+            if (!target) return;
+
+            event.preventDefault();
+
+            navLinks.forEach(item => item.classList.remove('active'));
+            this.classList.add('active');
+
+            const offsetTop = target.offsetTop - 95;
+
+            window.scrollTo({
+                top: offsetTop,
+                behavior: 'smooth'
+            });
+        });
+    });
+
+    window.addEventListener('scroll', setActiveMenu);
+    window.addEventListener('load', setActiveMenu);
+    window.addEventListener('resize', setActiveMenu);
+</script>
 </body>
 </html>
